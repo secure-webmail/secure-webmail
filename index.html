@@ -1,10 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   <title>Secure Webmail</title>
+  <script>
+
+var onMessage = function(event){
+
+  var resizeParentIframe = function(height) {
+    var iframe = window.document.getElementById('secure_webmail_frame')
+    iframe.style.height = height + 'px'
+  }
+
+  var scrollToBottom = function() {
+    var iframe = window.document.getElementById('secure_webmail_frame')
+    var height = iframe.offsetHeight
+    window.scrollTo(0, height)
+  }
+
+  try {
+    var data = JSON.parse(event.data)
+    if (!(data instanceof Object)) return
+
+    switch(data.type) {
+      case 'resizeParentIframe':
+        if ((typeof data.height === 'number') && (data.height > 0))
+          resizeParentIframe(data.height)
+        break
+      case 'scrollToBottom':
+        scrollToBottom()
+        break
+      default:
+        break
+    }
+  }
+  catch(err){}
+}
+
+window.addEventListener('message', onMessage, false)
+
+  </script>
 </head>
 <body>
-  Hello World!
+  <iframe
+    id="secure_webmail_frame"
+    src="https://script.google.com/macros/s/AKfycbxjGr_DXhEsXfQxDtKII3LkCEGC5zgsQcdx4DJNWJitkyx8FLZV/exec"
+    frameborder="0"
+    width="100%"
+    marginheight="0"
+    marginwidth="0"
+    scrolling="no"
+  ></iframe>
 </body>
 </html>
